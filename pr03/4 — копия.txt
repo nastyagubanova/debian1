@@ -1,0 +1,28 @@
+# ПР №4 — правила аудита для учебной системы
+
+# Очистить существующие правила при загрузке
+-D
+
+# Размер буфера
+-b 8192
+
+# Мониторинг файлов аутентификации
+-w /etc/passwd -p rwa -k auth-files
+-w /etc/shadow -p rwa -k auth-files
+-w /etc/group -p rwa -k auth-files
+
+# Мониторинг привилегий
+-w /etc/sudoers -p rwa -k priv-files
+-w /etc/sudoers.d/ -p rwa -k priv-files
+
+# Мониторинг SSH конфига
+-w /etc/ssh/sshd_config -p rwa -k ssh-config
+
+# Фиксировать отказы в доступе
+-a always,exit -F arch=b64 -S open -S openat -F success=0 -k access-denied
+
+# Фиксировать удаление файлов
+-a always,exit -F arch=b64 -S unlink -S unlinkat -k file-delete
+
+# Фиксировать повышение привилегий (euid=0 но auid не root)
+-a always,exit -F arch=b64 -S execve -F euid=0 -F auid!=0 -F auid!=-1 -k priv-exec 
