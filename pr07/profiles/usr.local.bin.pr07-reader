@@ -1,0 +1,10 @@
+#include <tunables/global>
+/usr/local/bin/pr07-reader {
+#include <abstractions/base>
+#include <abstractions/bash>
+/bin/bash ix,
+/bin/cat ix,
+/usr/bin/cat ix,
+/tmp/pr07-allowed.txt r,
+/tmp/pr07-output.txt w,
+}
